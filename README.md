@@ -1,6 +1,6 @@
-# Aio-Cache (for asyncio projects)
+# Aio-Cache (asyncio cache)
 Package for use cache async, including retries (tenacity) and serialization.
-It is possible add more backends and serializers easily
+It is possible add more backends and serializers easily.
 Require Python 3.10+
 
 
