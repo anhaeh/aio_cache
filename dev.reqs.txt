@@ -1,0 +1,6 @@
+-r init.reqs.txt
+pytest
+pytest-asyncio
+pytest-sugar
+coverage
+ruff
