@@ -1,15 +1,14 @@
 # Aio-Cache (asyncio cache)
-Package for use cache async, including retries (tenacity) and serialization.
+Python cache library for use with asyncio. This including retries (tenacity), exponential backoff and serialization.
 It is possible add more backends and serializers easily.
 Require Python 3.10+
 
 
-## Backends
-* Null
+## Available Backends
 * Memory
 * Redis (https://github.com/redis/redis-py)
 
-## Serializers
+## Available Serializers
 * msgpack (default)
 * orjson
 
@@ -41,7 +40,7 @@ from aio_cache.cache_service import CacheService
 
 cache = CacheService()
 cache.initialize(cache_uri="memory://")
-await cache.set("hello", "world")
+await cache.set("hello", "world", ttl=60)
 ```
 
 ### Another serializer
