@@ -67,11 +67,35 @@ cache = CacheService(cache_error_exception=CustomCacheException)
 ```
 
 
-## Unit Tests
-```bash
-pip install -r dev.reqs.txt
-pytest
-# with coverage
-sh ./run_tests.sh
+## Fast-Api integration sample
+```python
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from aio_cache.cache_service import CacheService
+
+
+class RedisException(Exception):
+    def __init__(self, name: str):
+        self.name = name
+
+
+app = FastAPI()
+
+cache = CacheService(cache_error_exception=RedisException)
+cache.initialize(cache_uri="redis://localhost/0", prefix="fast_")
+
+
+@app.exception_handler(RedisException)
+async def redis_exception_handler(request: Request, exc: RedisException):
+    return JSONResponse(
+        status_code=418,
+        content={"message": f"Oops! {exc.name}. Maybe you must to check your redis..."},
+    )
+
+
+@app.get("/cache/{name}/")
+async def read_name(name: str):
+    result = await cache.get(name)
+    return {"result": result}
 ```
 

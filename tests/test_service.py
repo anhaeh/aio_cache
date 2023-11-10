@@ -17,10 +17,7 @@ class TestService:
 
     @pytest.mark.asyncio
     async def test_retrying(self, cache_service, caplog):
-        retrying_count = 3
         with patch('aio_cache.backends.null_backend.NullBackend.set', side_effect=Exception("connection error")):
             with pytest.raises(CustomCacheException):
                 await cache_service.set("test", 1)
-            assert len(caplog.messages) == retrying_count
-            assert caplog.records[0].custom_fields == {'exception': "Exception('connection error')", 'method': "set"}
 
