@@ -23,10 +23,7 @@ class MemoryBackend(BaseBackend):
         return value
 
     async def delete_by_pattern(self, pattern: str):
-        to_delete = []
-        for key in self._cache:
-            if key[:len(pattern)] == pattern:
-                to_delete.append(key)
+        to_delete = [key for key in self._cache if key[:len(pattern)] == pattern]
         for x in to_delete:
             del self._cache[x]
 
