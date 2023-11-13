@@ -19,7 +19,7 @@ def safe(f):
         try:
             return await f(*args, **kwargs)
         except Exception as e:
-            exception = args[0].cache_error_exception or Exception
+            exception = args[0].cache_error_exception
             raise exception(repr(e))
 
     return wrapper
@@ -36,7 +36,7 @@ class CacheService(metaclass=Singleton):
         "json"
     ]
 
-    def __init__(self, cache_error_exception=None):
+    def __init__(self, cache_error_exception: type[BaseException] = Exception):
         self.__backend = NullBackend()
         self.cache_error_exception = cache_error_exception
 
