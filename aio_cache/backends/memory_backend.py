@@ -16,12 +16,11 @@ class MemoryBackend(BaseBackend):
         self._cache[key] = (value, due_time)
 
     async def get(self, key: str):
-        result = self._cache.get(key)
-        if result:
-            result = result[0]
-        if result and time() > self._cache[key][1]:
-            result = None
-        return result
+        value, due = self._cache.get(key, (None, 0))
+        if value is not None and time() > due:
+            value = None
+            del self._cache[key]
+        return value
 
     async def delete_by_pattern(self, pattern: str):
         to_delete = []
