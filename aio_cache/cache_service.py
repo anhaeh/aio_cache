@@ -5,7 +5,6 @@ from importlib import import_module
 from tenacity import retry, stop_after_delay, stop_after_attempt, wait_random_exponential
 
 from aio_cache.backends.null_backend import NullBackend
-from aio_cache.utils import Singleton
 
 
 class InvalidModuleAioCacheException(Exception):
@@ -25,7 +24,7 @@ def safe(f):
     return wrapper
 
 
-class CacheService(metaclass=Singleton):
+class CacheService:
     BACKENDS = [
         "redis",
         "memory"
@@ -56,8 +55,6 @@ class CacheService(metaclass=Singleton):
         return getattr(m, f"{name.title()}Serializer")
 
     def initialize(self, cache_uri: str = "", prefix: str = "", serializer: str = "msgpack"):
-        self.__backend = NullBackend()
-
         if cache_uri:
             url_parsed = urlparse(cache_uri)
             backend_class = self.__get_backend_class(url_parsed)
