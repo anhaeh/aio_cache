@@ -34,7 +34,7 @@ await cache.set("hello", [1, 2, 3])
 result = await cache.get("hello")
 
 await cache.mset("hello", [("key1", 1), ("key2": "bye")]) # multi set using a pipeline
-results = await cache.mget("hello", ["key1", "key2"]) # multi get using a pipeline
+results = await cache.mget(["key1", "key2"]) # multi get using a pipeline
 
 await cache.delete_by_pattern("key") # delete keys thats match with "key*"
 ```
