@@ -7,7 +7,7 @@ class MsgpackSerializer(Serializer):
 
     @classmethod
     def encode(cls, value: Any) -> bytes:
-        return msgpack.dumps(value)
+        return msgpack.dumps(value, default=str)
 
     @classmethod
     def decode(cls, value: str) -> Any:
