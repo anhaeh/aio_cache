@@ -3,7 +3,6 @@ from typing import Any
 
 
 class Serializer(ABC):
-
     @classmethod
     @abstractmethod
     def encode(cls, value) -> bytes:

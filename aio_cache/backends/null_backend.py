@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Sequence
 
 from aio_cache.backends import BaseBackend
 
@@ -16,8 +16,8 @@ class NullBackend(BaseBackend):
     async def delete_by_pattern(self, pattern: str):
         return 0
 
-    async def mget(self, keys: list[Any]):
+    async def mget(self, keys: Sequence[str]):
         return [None for _ in keys]
 
-    async def mset(self, items: list[tuple[str, Any]], ttl: int = None):
+    async def mset(self, items: Sequence[tuple[str, Any]], ttl: int = None):
         pass

@@ -1,10 +1,9 @@
 import redis.asyncio as redis
-from typing import Any, Generator
+from typing import Any, Generator, Sequence
 from aio_cache.backends import BaseBackend
 
 
 class RedisBackend(BaseBackend):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         try:
@@ -12,8 +11,14 @@ class RedisBackend(BaseBackend):
         except Exception:
             self.__db = 0
 
-        self.__pool = redis.ConnectionPool(host=self._host, username=self._username, password=self._password,
-                                           db=self.__db, protocol=3, max_connections=self._max_connections)
+        self.__pool = redis.ConnectionPool(
+            host=self._host,
+            username=self._username,
+            password=self._password,
+            db=self.__db,
+            protocol=3,
+            max_connections=self._max_connections,
+        )
         self.__client = redis.Redis(connection_pool=self.__pool)
 
     async def set(self, key: str, value: Any, ttl: int = None):
@@ -25,14 +30,14 @@ class RedisBackend(BaseBackend):
         k = self._prefix + key
         return self._serializer.decode(await self.__client.get(k))
 
-    async def mget(self, keys: list) -> Generator:
+    async def mget(self, keys: Sequence[str]) -> Generator:
         pipe = await self.__client.pipeline()
         for x in keys:
             pipe.get(self._prefix + x)
         results = await pipe.execute()
         return (self._serializer.decode(x) for x in results)
 
-    async def mset(self, items: list[tuple[str, Any]], ttl: int = None):
+    async def mset(self, items: Sequence[tuple[str, Any]], ttl: int = None):
         ttl = ttl or self._ttl
         pipe = await self.__client.pipeline()
         for k, v in items:

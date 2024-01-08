@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Sequence
 from urllib.parse import urlparse
 from importlib import import_module
 
@@ -12,8 +12,11 @@ class InvalidModuleAioCacheException(Exception):
 
 
 def safe(f):
-    @retry(reraise=True, stop=(stop_after_delay(25) | stop_after_attempt(3)),
-           wait=wait_random_exponential(multiplier=2, max=10))
+    @retry(
+        reraise=True,
+        stop=(stop_after_delay(25) | stop_after_attempt(3)),
+        wait=wait_random_exponential(multiplier=2, max=10),
+    )
     async def wrapper(*args, **kwargs):
         try:
             return await f(*args, **kwargs)
@@ -25,15 +28,9 @@ def safe(f):
 
 
 class CacheService:
-    BACKENDS = [
-        "redis",
-        "memory"
-    ]
+    BACKENDS = ["redis", "memory"]
 
-    SERIALIZERS = [
-        "msgpack",
-        "json"
-    ]
+    SERIALIZERS = ["msgpack", "json"]
 
     def __init__(self, cache_error_exception: type[BaseException] = Exception):
         self.__backend = NullBackend()
@@ -75,11 +72,11 @@ class CacheService:
         return await self.__backend.delete_by_pattern(pattern)
 
     @safe
-    async def mget(self, keys: list[Any]):
+    async def mget(self, keys: Sequence[str]):
         return await self.__backend.mget(keys)
 
     @safe
-    async def mset(self, items: list[tuple[str, Any]], ttl: int = None):
+    async def mset(self, items: Sequence[tuple[str, Any]], ttl: int = None):
         return await self.__backend.mset(items, ttl)
 
     @safe
@@ -89,6 +86,7 @@ class CacheService:
     @safe
     async def prune(self):
         return await self.__backend.prune()
+
 
 # samples
 # uri_memory = "memory://dummy"

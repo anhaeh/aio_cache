@@ -4,7 +4,6 @@ from aio_cache.serializers import Serializer
 
 
 class MsgpackSerializer(Serializer):
-
     @classmethod
     def encode(cls, value: Any) -> bytes:
         return msgpack.dumps(value, default=str)
