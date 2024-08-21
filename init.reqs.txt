@@ -1,4 +1,1 @@
-orjson
-msgpack
 tenacity
-redis

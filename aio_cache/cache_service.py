@@ -28,9 +28,9 @@ def safe(f):
 
 
 class CacheService:
-    BACKENDS = ["redis", "memory"]
+    BACKENDS = ("redis", "memory")
 
-    SERIALIZERS = ["msgpack", "json"]
+    SERIALIZERS = ("pickle", "json", "msgpack")
 
     def __init__(self, cache_error_exception: type[BaseException] = Exception):
         self.__backend = NullBackend()
@@ -51,7 +51,7 @@ class CacheService:
         m = self.__import_module(name, self.SERIALIZERS, "aio_cache.serializers.{}_serializer")
         return getattr(m, f"{name.title()}Serializer")
 
-    def initialize(self, cache_uri: str = "", prefix: str = "", serializer: str = "msgpack"):
+    def initialize(self, cache_uri: str = "", prefix: str = "", serializer: str = "pickle"):
         if cache_uri:
             url_parsed = urlparse(cache_uri)
             backend_class = self.__get_backend_class(url_parsed)

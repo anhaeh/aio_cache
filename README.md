@@ -9,7 +9,8 @@ Require Python 3.10+
 * Redis (https://github.com/redis/redis-py)
 
 ## Available Serializers
-* msgpack (default)
+* pickle (default)
+* msgpack
 * orjson
 
 
