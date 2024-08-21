@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Sequence
 from urllib.parse import parse_qs, ParseResult
 from aio_cache.serializers import Serializer
 
@@ -30,11 +30,11 @@ class BaseBackend(ABC):
         pass
 
     @abstractmethod
-    async def mget(self, keys: list[Any]):
+    async def mget(self, keys: Sequence[str]):
         pass
 
     @abstractmethod
-    async def mset(self, items: list[tuple[str, Any]], ttl: int = None):
+    async def mset(self, items: Sequence[tuple[str, Any]], ttl: int = None):
         pass
 
     async def close(self):
