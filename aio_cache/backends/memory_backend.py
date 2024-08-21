@@ -10,7 +10,6 @@ class MemoryBackend(BaseBackend):
         super().__init__(*args, **kwargs)
 
     async def set(self, key: str, value: Any, ttl: int = None):
-        ttl = ttl or self._ttl
         due_time = datetime.now() + timedelta(seconds=ttl or self._ttl)
         due_time = float(due_time.strftime("%s"))
         self._cache[key] = (value, due_time)
