@@ -1,4 +1,19 @@
 [tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "aio_cache/__init__.py",
+    "tests",
+    "setup.py"
+]
+
+# Assume Python 3.11
+target-version = "py311"
+
+line-length = 120
+indent-width = 4
+
+
+[tool.ruff.lint]
 # "E" pycodestyle | "F" pyflakes | "Q" flake8-quotes
 select = ["E", "F", "Q"]
 ignore = []
@@ -7,19 +22,16 @@ ignore = []
 fixable = ["ALL"]
 unfixable = []
 
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    "aio_cache/__init__.py",
-    "tests",
-    "setup.py"
-]
 per-file-ignores = {}
-
-# Same as Black.
-line-length = 120
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-# Assume Python 3.11
-target-version = "py310"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
